@@ -29,10 +29,12 @@ export class NavbarComponent implements OnInit {
       if (isAuthenticated) {
         this.getUserInfo();
       } else {
+        this.currentUser = null;
         this.userInitials = ''; 
       }
     });
   }
+
 
   getUserInfo() {
     this.authService.getAuthenticatedUser().subscribe({

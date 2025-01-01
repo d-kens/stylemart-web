@@ -30,6 +30,11 @@ export class CreateCategoryComponent {
   }
 
   createCategory() {
+    if (this.createCategoryForm.invalid) {
+      this.createCategoryForm.markAllAsTouched();
+      return;
+    }
+
     this.loading = true;
     
     const createCategoryRequest: ProductCategory = {

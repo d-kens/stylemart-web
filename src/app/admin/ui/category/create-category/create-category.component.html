@@ -7,8 +7,8 @@
         <label class="form-control w-full">
             <span class="block text-sm font-medium text-gray-700">Category Name</span>
             <input 
-                type="category-name" 
-                placeholder="Enter your email"
+                type="text" 
+                placeholder="Enter category name"
                 class="mt-1 input input-bordered w-full rounded-md border-gray-300 focus:outline-none
                 {{ categoryName?.invalid && (categoryName?.dirty || categoryName?.touched) ? 'border-red-500' : 'border-gray-300' }}" 
                 formControlName="categoryName"
@@ -17,7 +17,7 @@
         </label>
 
         <button 
-            [disabled]="loading || createCategoryForm.invalid"
+            [disabled]="loading"
             type="submit" 
             class="mt-6 w-full py-3 text-white bg-primary hover:bg-primary-dark rounded-md shadow-lg transition flex items-center justify-center"
         >
