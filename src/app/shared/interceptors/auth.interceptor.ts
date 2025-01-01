@@ -1,5 +1,3 @@
-// src/app/interceptors/auth.interceptor.ts
-
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -12,22 +10,24 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService, private router: Router) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const excludedUrls = ['/auth/register', '/auth/login'];
+    const excludedUrls = ['/auth/register', '/auth/login', '/auth/refresh-token', '/auth/logout'];
 
     const isExcludedUrl = excludedUrls.some(url => request.url.includes(url));
 
     if (isExcludedUrl) {
-      console.log("REQUEST NOT INTERCEPTED: " + request.url);
       return next.handle(request);
     }
 
-    // Get the access token from localStorage
     const accessToken = localStorage.getItem('authToken');
 
-    // Clone the request and add the Authorization header
+    if (!accessToken) {
+      this.authService.logout().subscribe();
+      this.router.navigate(['/auth/sign-in']);
+      return throwError(() => new Error('No access token provided'));
+    }
+    
     const clonedRequest = request.clone({
       headers: request.headers.set('Authorization', `Bearer ${accessToken}`),
-      withCredentials: true,
     });
 
     return next.handle(clonedRequest).pipe(
@@ -35,20 +35,13 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error.status === 401) {
           return this.authService.refreshToken().pipe(
             switchMap((response) => {
-              const newAccessToken = response.accessToken;
-              this.authService.storeAccessToken(newAccessToken);
-
+              this.authService.storeAccessToken(response.accessToken);
               const retryRequest = request.clone({
-                headers: request.headers.set('Authorization', `Bearer ${newAccessToken}`),
+                headers: request.headers.set('Authorization', `Bearer ${response.accessToken}`),
               });
               return next.handle(retryRequest);
-            }),
-            catchError((refreshError) => {
-              this.authService.logout().subscribe();
-              this.router.navigate(['/auth/sign-in']);
-              return throwError(() => new Error('Refresh token expired'));
             })
-          );
+          )
         }
         return throwError(() => error);
       })
