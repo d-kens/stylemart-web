@@ -6,6 +6,7 @@ import {
   faTruckFast,
   faUser,
   faXmark,
+  faCircleExclamation
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFacebook,
@@ -25,4 +26,5 @@ export const fontAwesomeIcons: IconDefinition[] = [
   faCheck,
   faShoppingCart,
   faCircleCheck,
+  faCircleExclamation
 ];

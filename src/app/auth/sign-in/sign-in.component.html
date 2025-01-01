@@ -40,13 +40,14 @@
             </a>
         </div>
 
-        <!-- Submit Button -->
         <button 
-            [disabled]="loading"
+            [disabled]="loading || loginForm.invalid"
             type="submit" 
-            class="mt-6 w-full py-3 text-white bg-primary hover:bg-primary-dark rounded-md shadow-lg transition"
+            class="mt-6 w-full py-3 text-white bg-primary hover:bg-primary-dark rounded-md shadow-lg transition flex items-center justify-center"
         >
-            Login
+            <span *ngIf="loading" class="loading loading-spinner mr-2"></span>
+            <span *ngIf="!loading">Login</span>
+            <span *ngIf="loading">Authenticating...</span>
         </button>
     </form>
 

@@ -4,12 +4,12 @@ import { EmailVerificationComponent } from './auth/email-verification/email-veri
 import { SignInComponent } from './auth/sign-in/sign-in.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
-import { AdminCategoriesComponent } from './admin/admin-categories/admin-categories.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { RolesGuard } from './shared/guards/roles.guard';
-import { CreateCategoryComponent } from './admin/create-category/create-category.component';
-import { CreateProductComponent } from './admin/create-product/create-product.component';
-import { AdminProductsComponent } from './admin/admin-products/admin-products.component';
+import { CreateCategoryComponent } from './admin/ui/category/create-category/create-category.component';
+import { CreateProductComponent } from './admin/ui/product/create-product/create-product.component';
+import { AdminProductsComponent } from './admin/ui/product/admin-products/admin-products.component';
+import { AdminCategoriesComponent } from './admin/ui/category/admin-categories/admin-categories.component';
 
 export const routes: Routes = [
     {
