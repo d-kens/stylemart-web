@@ -35,19 +35,16 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error.status === 401) {
           return this.authService.refreshToken().pipe(
             switchMap((response) => {
-              console.log("REFRESH TOKEN RESPONSE", response)
-              // Assuming the response contains the new access token
               const newAccessToken = response.accessToken;
-              this.authService.storeAccessToken(newAccessToken); // Store the new access token
+              this.authService.storeAccessToken(newAccessToken);
 
-              // Retry the original request with the new access token
               const retryRequest = request.clone({
                 headers: request.headers.set('Authorization', `Bearer ${newAccessToken}`),
               });
               return next.handle(retryRequest);
             }),
             catchError((refreshError) => {
-              this.authService.logout();
+              this.authService.logout().subscribe();
               this.router.navigate(['/auth/sign-in']);
               return throwError(() => new Error('Refresh token expired'));
             })
