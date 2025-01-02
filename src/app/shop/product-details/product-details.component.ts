@@ -5,6 +5,8 @@ import { ProductCardComponent } from '../product-card/product-card.component';
 import { Product, ProductPagination } from '../../admin/data-access/models/product.model';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CartService } from '../../shared/services/cart.service';
+import { interval, take } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
@@ -23,6 +25,7 @@ export class ProductDetailsComponent implements OnInit {
   iconAddToCart = 'shopping-cart';
  
   private productService = inject(ProductService);
+  private cartService = inject(CartService);
 
   constructor(private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
@@ -71,7 +74,13 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToCart(productToAdd: Product) {
+    this.cartService.updateCart(productToAdd.id!, 'add');
     this.labelAddToCart = 'Added to cart';
     this.iconAddToCart = 'check';
+
+    interval(3000).pipe(take(1)).subscribe(() => {
+      this.labelAddToCart = 'Add to cart';
+      this.iconAddToCart ='shopping-cart';
+    })
   }
 }

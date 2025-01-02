@@ -7,5 +7,8 @@ export const environment = {
     },
     products: {
         baseUrl: 'https://stylemart-api.onrender.com/products'
+    },
+    orders: {
+        baseUrl: 'https://stylemart-api.onrender.com/orders'
     }
 }

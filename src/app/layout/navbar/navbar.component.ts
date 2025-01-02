@@ -7,6 +7,7 @@ import { User } from '../../auth/data-access/models/user.model';
 import { ToastrService } from 'ngx-toastr';
 import { ProductService } from '../../shared/services/product.service';
 import { ProductCategory } from '../../admin/data-access/models/product.model';
+import { CartService } from '../../shared/services/cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,19 +20,23 @@ export class NavbarComponent implements OnInit {
   isMenuOpen = false;
   currentUser: User | null = null;
   userInitials: string | null = null;
-
   categories: ProductCategory[] = [];
+  numberOfItemsInCart = 0;
   
   constructor(
     private authService: AuthService, 
     private toastr: ToastrService, 
     private router: Router,
-    private productsService: ProductService
+    private productsService: ProductService,
+    private cartService: CartService
   ) {
     this.isAuthenticated$ = this.authService.isAuthenticated$;
   }
 
   ngOnInit() {
+
+    this.listenToCart();
+
     this.isAuthenticated$.subscribe(isAuthenticated => {
       if (isAuthenticated) {
         this.getUserInfo();
@@ -42,6 +47,13 @@ export class NavbarComponent implements OnInit {
     });
 
     this.fetchCategories()
+  }
+
+
+  private listenToCart() {
+    this.cartService.addedToCart.subscribe(productsInCart => {
+      this.numberOfItemsInCart = productsInCart.reduce((acc, product) => acc + product.quantity, 0);
+    })
   }
 
 

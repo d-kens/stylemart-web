@@ -13,6 +13,7 @@ import { AdminCategoriesComponent } from './admin/ui/category/admin-categories/a
 import { HomeComponent } from './home/home.component';
 import { ProductDetailsComponent } from './shop/product-details/product-details.component';
 import { ProductsComponent } from './shop/products/products.component';
+import { CartComponent } from './shop/cart/cart.component';
 
 export const routes: Routes = [
     {
@@ -78,5 +79,9 @@ export const routes: Routes = [
     {
         path: 'products',
         component: ProductsComponent
+    },
+    {
+        path: 'cart',
+        component: CartComponent
     }
 ];
