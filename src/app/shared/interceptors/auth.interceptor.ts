@@ -10,9 +10,18 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService, private router: Router) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const excludedUrls = ['/auth/register', '/auth/login', '/auth/refresh-token', '/auth/logout'];
+    const excludedUrls = [
+      { url: '/auth/register', method: null },
+      { url: '/auth/login', method: null },
+      { url: '/auth/refresh-token', method: null },
+      { url: '/auth/logout', method: null },
+      { url: '/products', method: 'GET' }, // Exclude only GET requests to /products
+    ];
 
-    const isExcludedUrl = excludedUrls.some(url => request.url.includes(url));
+    const isExcludedUrl = excludedUrls.some(
+      (rule) =>
+        request.url.includes(rule.url) && (!rule.method || request.method === rule.method)
+    );
 
     if (isExcludedUrl) {
       return next.handle(request);
@@ -25,7 +34,7 @@ export class AuthInterceptor implements HttpInterceptor {
       this.router.navigate(['/auth/sign-in']);
       return throwError(() => new Error('No access token provided'));
     }
-    
+
     const clonedRequest = request.clone({
       headers: request.headers.set('Authorization', `Bearer ${accessToken}`),
     });
@@ -41,7 +50,7 @@ export class AuthInterceptor implements HttpInterceptor {
               });
               return next.handle(retryRequest);
             })
-          )
+          );
         }
         return throwError(() => error);
       })

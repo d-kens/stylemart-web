@@ -20,6 +20,7 @@ export interface BaseProduct {
 export interface Product extends BaseProduct {
     id?: string;
     category: ProductCategory;
+    imageUrl: string;
 }
 
 export interface NewProduct extends BaseProduct {

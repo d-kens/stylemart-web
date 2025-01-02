@@ -10,8 +10,13 @@ import { CreateCategoryComponent } from './admin/ui/category/create-category/cre
 import { CreateProductComponent } from './admin/ui/product/create-product/create-product.component';
 import { AdminProductsComponent } from './admin/ui/product/admin-products/admin-products.component';
 import { AdminCategoriesComponent } from './admin/ui/category/admin-categories/admin-categories.component';
+import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
+    {
+        path: '',
+        component: HomeComponent
+    },
     {
         path: 'auth/sign-up',
         component: SignUpComponent
@@ -63,5 +68,5 @@ export const routes: Routes = [
         data: {
             role: 'ADMIN'
         }
-      },
+    },
 ];

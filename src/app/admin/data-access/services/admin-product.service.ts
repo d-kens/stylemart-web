@@ -34,7 +34,7 @@ export class AdminProducService {
           .set('limit', limit.toString());
     
         return this.http.get<ProductPagination>(`${productBaseUrl}`, { params });
-      }
+    }
 
     createProduct(product: NewProduct): Observable<Product> {
         const formData = new FormData();
