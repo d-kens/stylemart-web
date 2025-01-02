@@ -21,6 +21,8 @@ export class ProductService {
     }
 
     findAllProducts(page: number = 1, limit: number = 10, categoryId?: string, sizes?: string): Observable<ProductPagination> {
+
+        console.log(page, limit, categoryId, sizes)
         let params = new HttpParams()
         .set('page', page.toString())
         .set('limit', limit.toString());

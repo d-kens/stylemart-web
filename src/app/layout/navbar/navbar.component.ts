@@ -49,7 +49,6 @@ export class NavbarComponent implements OnInit {
     this.productsService.findAllCategories().subscribe({
       next: (categories: ProductCategory[]) => {
         this.categories = categories;
-        console.log("CATEGORIES FETECHED", categories);
       },
       error: (error) => {
         this.toastr.error('Failed to fetch categories');

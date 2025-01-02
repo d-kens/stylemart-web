@@ -43,7 +43,6 @@ export class ProductsFilterComponent {
 
 
   private onFilterChange(filter: Partial<ProductFilterForm>): void {
-    console.log("THIS IS THE FILTER: " + filter);
 
     const filterProduct: ProductFilter = {
       size: ''
@@ -64,9 +63,6 @@ export class ProductsFilterComponent {
         }
       }
     }
-
-
-    console.log("FITER PRODUCT: " + filterProduct)
 
     this.productFilter.emit(filterProduct);
   }
