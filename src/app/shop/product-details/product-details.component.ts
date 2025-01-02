@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ProducService } from '../../shared/services/product.service';
+import { ProductService } from '../../shared/services/product.service';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { Product, ProductPagination } from '../../admin/data-access/models/product.model';
 import { CommonModule } from '@angular/common';
@@ -22,7 +22,7 @@ export class ProductDetailsComponent implements OnInit {
   labelAddToCart = 'Add to cart';
   iconAddToCart = 'shopping-cart';
  
-  private productService = inject(ProducService);
+  private productService = inject(ProductService);
 
   constructor(private route: ActivatedRoute) {
     this.route.params.subscribe(params => {

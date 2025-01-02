@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Product, ProductPagination } from '../../admin/data-access/models/product.model';
 import { AdminProducService } from '../../admin/data-access/services/admin-product.service';
 import { ProductCardComponent } from '../../shop/product-card/product-card.component';
-import { ProducService } from '../../shared/services/product.service';
+import { ProductService } from '../../shared/services/product.service';
 
 @Component({
   selector: 'app-featured',
@@ -21,7 +21,7 @@ export class FeaturedComponent implements OnInit {
   itemsPerPage = 10;
 
 
-  private productService = inject(ProducService);
+  private productService = inject(ProductService);
 
   ngOnInit(): void {
     this.fetchProducts(this.currentPage, this.itemsPerPage);

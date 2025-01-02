@@ -15,7 +15,8 @@ export class AuthInterceptor implements HttpInterceptor {
       { url: '/auth/login', method: null },
       { url: '/auth/refresh-token', method: null },
       { url: '/auth/logout', method: null },
-      { url: '/products', method: 'GET' }, // Exclude only GET requests to /products
+      { url: '/products', method: 'GET' },
+      { url: '/categories', method: 'GET'}
     ];
 
     const isExcludedUrl = excludedUrls.some(
@@ -24,6 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
     );
 
     if (isExcludedUrl) {
+      console.log("REQUEST NOT INTERCEPTED: " + request.url)
       return next.handle(request);
     }
 

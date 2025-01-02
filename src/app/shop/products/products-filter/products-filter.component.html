@@ -1,0 +1,12 @@
+<form [formGroup]="productFilterForm">
+    <div class="font-bold text-lg mb-2">Size</div>
+  <form [formGroup]="getSizeFormGroup()">
+      @for(size of sizes; track size) {
+        <label class="cursor-pointer label justify-start items-center">
+          <input type="checkbox" checked="checked" class="checkbox checkbox-primary checkbox-md"
+          formControlName="{{size}}"/>
+          <span class="label-text ms-3">{{size}}</span>
+        </label>
+      }
+  </form>
+</form>

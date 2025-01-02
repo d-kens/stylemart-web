@@ -5,6 +5,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AuthService } from '../../auth/data-access/services/auth.service';
 import { User } from '../../auth/data-access/models/user.model';
 import { ToastrService } from 'ngx-toastr';
+import { ProductService } from '../../shared/services/product.service';
+import { ProductCategory } from '../../admin/data-access/models/product.model';
 
 @Component({
   selector: 'app-navbar',
@@ -16,11 +18,16 @@ export class NavbarComponent implements OnInit {
   isAuthenticated$; 
   isMenuOpen = false;
   currentUser: User | null = null;
-
-  // user: { firstName: string; lastName: string } | null = null; 
   userInitials: string | null = null;
+
+  categories: ProductCategory[] = [];
   
-  constructor(private authService: AuthService, private toastr: ToastrService, private router: Router) {
+  constructor(
+    private authService: AuthService, 
+    private toastr: ToastrService, 
+    private router: Router,
+    private productsService: ProductService
+  ) {
     this.isAuthenticated$ = this.authService.isAuthenticated$;
   }
 
@@ -31,6 +38,21 @@ export class NavbarComponent implements OnInit {
       } else {
         this.currentUser = null;
         this.userInitials = ''; 
+      }
+    });
+
+    this.fetchCategories()
+  }
+
+
+  fetchCategories() {
+    this.productsService.findAllCategories().subscribe({
+      next: (categories: ProductCategory[]) => {
+        this.categories = categories;
+        console.log("CATEGORIES FETECHED", categories);
+      },
+      error: (error) => {
+        this.toastr.error('Failed to fetch categories');
       }
     });
   }

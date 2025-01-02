@@ -15,7 +15,20 @@
           <details #productsMenu>
             <summary>Products</summary>
             <ul class="z-30">
-              <li><a (clickOutside)="closeMenu(productsMenu)" (click)="closeMenu(productsMenu)">All</a></li>
+              @if(categories.length > 0) {
+                @for (category of categories; track category.id) {
+                  <li>
+                    <a 
+                      [routerLink]="['products']"
+                      [queryParams]="{category: category.id}"
+                      (click)="closeMenu(productsMenu)" 
+                      (clickOutside)="closeMenu(productsMenu)"
+                    >
+                      {{ category.name }}
+                    </a>
+                  </li>
+                }
+              }
             </ul>
           </details>
         </li>

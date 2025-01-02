@@ -39,6 +39,17 @@ export interface ProductPagination {
     }
 }
 
+export interface ProductFilter {
+    size?: string;
+    categoryId?: string | null;
+}
+
+export interface ProductFilterForm {
+    size?: {
+        [size: string]: boolean
+    } | undefined;
+}
+
 
 
 

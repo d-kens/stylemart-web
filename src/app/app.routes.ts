@@ -12,6 +12,7 @@ import { AdminProductsComponent } from './admin/ui/product/admin-products/admin-
 import { AdminCategoriesComponent } from './admin/ui/category/admin-categories/admin-categories.component';
 import { HomeComponent } from './home/home.component';
 import { ProductDetailsComponent } from './shop/product-details/product-details.component';
+import { ProductsComponent } from './shop/products/products.component';
 
 export const routes: Routes = [
     {
@@ -73,5 +74,9 @@ export const routes: Routes = [
     {
         path: 'product/:productId',
         component: ProductDetailsComponent
+    },
+    {
+        path: 'products',
+        component: ProductsComponent
     }
 ];
