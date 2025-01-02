@@ -11,6 +11,7 @@ import { CreateProductComponent } from './admin/ui/product/create-product/create
 import { AdminProductsComponent } from './admin/ui/product/admin-products/admin-products.component';
 import { AdminCategoriesComponent } from './admin/ui/category/admin-categories/admin-categories.component';
 import { HomeComponent } from './home/home.component';
+import { ProductDetailsComponent } from './shop/product-details/product-details.component';
 
 export const routes: Routes = [
     {
@@ -69,4 +70,8 @@ export const routes: Routes = [
             role: 'ADMIN'
         }
     },
+    {
+        path: 'product/:productId',
+        component: ProductDetailsComponent
+    }
 ];

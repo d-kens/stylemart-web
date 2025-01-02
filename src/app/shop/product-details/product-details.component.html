@@ -1,1 +1,50 @@
-<p>product-details works!</p>
+@if (product) {
+    <div class="flex flex-col lg:flex-row justify-center items-center w-full">
+      <div class="lg:me-5">
+        <img
+          [src]="product.imageUrl"
+          alt="{{product.name}}" class="max-w-full lg:max-w-none" width="500px" />
+      </div>
+      <div class="w-full lg:w-auto">
+        <h1 class="text-3xl font-bold">{{ product.name }} - {{ product.size }}</h1>
+        @if (product.stock > 0) {
+          <div class="text-green-500 text-lg">In stock</div>
+        } @else {
+          <div class="text-red-500 text-lg">Out of stock</div>
+        }
+        <div class="text-2xl my-5">
+          <span class="line-through me-2">{{ getDiscountedPrice(product.price) | currency }}</span>
+          <span class="me-2">{{ product.price | currency }}</span>
+        </div>
+        <div>Brand: <span class="font-bold">{{ product.brand }}</span></div>
+        <div class="flex items-center mt-1">
+          <div class="me-1">Color:</div>
+          <div class="w-5 h-5 rounded-full" [ngStyle]="{'background-color': product.color}"></div>
+        </div>
+        <div>Size: <span class="font-bold">{{ product.size }}</span></div>
+        <div class="my-5 w-96">
+          <h2 class="text-xl font-bold">Description</h2>
+          {{ product.description }}
+        </div>
+        <button class="btn btn-primary mt-5 w-full lg:w-64"
+                [disabled]="product.stock <= 0"
+                (click)="addToCart(product)">
+          <fa-icon class="me-1" [icon]="['fas', iconAddToCart]"></fa-icon>
+          {{ labelAddToCart }}
+        </button>
+      </div>
+    </div>
+  } @else if (loading) {
+    <div class="flex w-full justify-center">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  }
+<div class="mt-10">
+    <h2 class="text-2xl font-bold mb-7 ms-4 sm:ms-0">Related products</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+    xl:grid-cols-5 gap-8 sm:gap-5">
+      @for (product of relatedProducts; track product.id) {
+        <app-product-card [product]="product"></app-product-card>
+      }
+    </div>
+</div>
