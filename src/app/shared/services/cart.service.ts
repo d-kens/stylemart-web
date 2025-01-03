@@ -6,7 +6,7 @@
 
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject, map, Observable } from "rxjs";
+import { BehaviorSubject, map, Observable, tap } from "rxjs";
 import { Cart, CartItemAdd } from "../models/cart.model";
 import { environment } from "../../../environments/environment";
 
@@ -96,7 +96,10 @@ export class CartService {
           .get<Cart>(`${ordersBaseUrl}/cart-details`, {
             params: { productIds: publicIdsForURL },
           })
-          .pipe(map((cart) => this.mapQuantity(cart, cartFromLocalStorage)));
+          .pipe(
+            tap((cart) => console.log('Cart from API:', cart)),
+            map((cart) => this.mapQuantity(cart, cartFromLocalStorage))
+          );
     }
 
 
