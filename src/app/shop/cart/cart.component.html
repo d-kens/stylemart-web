@@ -38,20 +38,27 @@
         <span class="loading loading-spinner loading-lg"></span>
       </div>
     } @else if (cartItems.length === 0) {
-      <div class="flex flex-col items-center justify-center h-60">
-        <div class="font-bold text-2xl">No items in cart</div>
-        <div>Add some items to your cart</div>
+      <div class="flex flex-col items-center justify-center h-60 ">
+        <p class="mb-4">Add some items to your cart</p>
+        <div class="w-full sm:w-1/4">
+          <button 
+            class="btn btn-primary w-full mb-4"
+            routerLink="/auth/sign-in"
+          >
+            Login
+          </button>  
+
+          <button 
+            class="btn btn-secondary border-2 border-primary w-full"
+            routerLink="/auth/sign-up"
+          >
+            Register
+          </button>
+        </div>
       </div>
     }
   </div>
   <div class="bg-gray-100 border-gray-400 p-5 w-full lg:w-96 h-72 mt-6 lg:mt-0 rounded-md">
-    <div class="font-bold">Order Summary</div>
-    <div class="border-t border-gray-300 my-5"></div>
-    <div class="flex justify-between">
-      <div>Delivery</div>
-      <div>{{ 0 | currency: 'KES' }}</div>
-    </div>
-    <div class="border-t border-gray-300 my-5"></div>
     <div class="flex justify-between font-bold">
       <div>Total</div>
       <div>{{ computeTotal() | currency: 'KES' }}</div>
