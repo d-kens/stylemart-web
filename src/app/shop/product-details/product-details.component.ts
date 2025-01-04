@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CartService } from '../../shared/services/cart.service';
 import { interval, take } from 'rxjs';
+import { CartItem } from '../../shared/models/cart.model';
 
 @Component({
   selector: 'app-product-details',
@@ -73,8 +74,17 @@ export class ProductDetailsComponent implements OnInit {
     return Number(price) + 200;
   }
 
-  addToCart(productToAdd: Product) {
-    this.cartService.updateCart(productToAdd.id!, 'add');
+  addToCart(product: Product) {
+    const cartItem: CartItem = {
+      id: product.id!,
+      name: product.name,
+      price: product.price,
+      brand: product.brand,
+      imageUrl: product.imageUrl,
+      quantity: 1
+    }
+    
+    this.cartService.updateCart(cartItem, 'add');
     this.labelAddToCart = 'Added to cart';
     this.iconAddToCart = 'check';
 
