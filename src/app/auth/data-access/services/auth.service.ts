@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
 import { RegReqObject } from '../models/auth.model';
 import { AuthReqObject } from '../models/auth.model';
 import { User } from '../models/user.model';
+import { CartService } from '../../../shared/services/cart.service';
 
 const baseUrl = environment.auth.baseUrl;
 
@@ -13,6 +14,7 @@ const baseUrl = environment.auth.baseUrl;
 })
 export class AuthService {
 
+  cartService: CartService = inject(CartService);
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.checkInitialAuthentication());
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
@@ -27,8 +29,24 @@ export class AuthService {
     return this.http.post<User>(`${baseUrl}/register`, userData)
   }
 
+  
+
   login(userData: AuthReqObject): Observable<{ accessToken: string }> {
-    return this.http.post<{ accessToken: string }>(`${baseUrl}/login`, userData)
+    return this.http.post<{ accessToken: string }>(`${baseUrl}/login`, userData).pipe(
+      tap(response => {
+        // Store access token
+        this.storeAccessToken(response.accessToken);
+
+        // Update authentication status
+        this.updateAuthenticationStatus(true);
+
+        // Merge carts
+        this.cartService.mergeCarts().subscribe({
+          next: () => console.log('Cart merged successfully'),
+          error: err => console.error('Error merging cart:', err),
+        });
+      })
+    );
   }
 
   refreshToken(): Observable<{ accessToken: string }> {

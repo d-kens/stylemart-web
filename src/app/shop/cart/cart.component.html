@@ -2,14 +2,14 @@
 <div class="flex flex-col lg:flex-row">
   <div class="flex-grow me-5 w-full">
     @if (cartItems.length !== 0) {
-      @for (item of cartItems; track item.id) {
+      @for (item of cartItems; track item.productId) {
         <div class="border-t border-gray-200"></div>
         <div class="flex items-center justify-between">
           <div class="p-4 flex">
             <img [src]="item.imageUrl"
                  alt="{{item.name}}" width="110px" class="max-w-full lg:max-w-none me-5" />
             <div class="w-40">
-              <a [routerLink]="['/product', item.id]">{{ item.name }}</a>
+              <a [routerLink]="['/product', item.productId]">{{ item.name }}</a>
               <div class="text-sm">{{ item.brand }}</div>
               <div class="font-bold">{{ item.price | currency: 'KES' }}</div>
             </div>
@@ -26,7 +26,7 @@
             </div>
             <div 
               class="ms-5 btn btn-error btn-outline"
-              (click)="removeItem(item.id)"
+              (click)="removeItem(item.productId)"
             >
               Remove
             </div>

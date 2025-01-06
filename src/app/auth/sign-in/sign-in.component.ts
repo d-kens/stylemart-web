@@ -50,9 +50,7 @@ export class SignInComponent {
     }
 
     this.authService.login(loginReqObject).subscribe({
-      next: (response) => {
-        this.authService.storeAccessToken(response.accessToken);
-        this.authService.updateAuthenticationStatus(true);
+      next: () => {
         this.loading = false;
         this.loginForm.reset();
         this.toastr.success('Login successful');

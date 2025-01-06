@@ -61,7 +61,7 @@ export class CartComponent implements OnInit {
   private updateQuantity(cartUpdated: Array<CartItem>) {
     for (const cartItemToUpdate of this.cartItems) {
       const itemToUpdate = cartUpdated.find(
-        (item) => item.id === cartItemToUpdate.id
+        (item) => item.productId === cartItemToUpdate.productId
       );
       if (itemToUpdate) {
         cartItemToUpdate.quantity = itemToUpdate.quantity;
@@ -81,7 +81,7 @@ export class CartComponent implements OnInit {
 
   removeItem(itemId: string) {
     const itemToRemoveIndex = this.cartItems.findIndex(
-      (item) => item.id === itemId
+      (item) => item.productId === itemId
     );
 
     if (itemToRemoveIndex) {

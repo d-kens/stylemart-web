@@ -10,5 +10,8 @@ export const environment = {
     },
     orders: {
         baseUrl: 'https://stylemart-api.onrender.com/orders'
+    },
+    cart: {
+        baseUrl: 'https://stylemart-api.onrender.com/cart'
     }
 }
