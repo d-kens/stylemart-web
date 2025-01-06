@@ -91,7 +91,7 @@ export class CartService {
     
         return this.getCartFromDb().pipe(
             map(dbCart => {
-                console.log("DB Items: " + dbCart.items)
+                console.log("DB Items: " + dbCart)
                 const mergedItems: CartItem[] = [...dbCart.items];
     
                 localCart.forEach(localItem => {
