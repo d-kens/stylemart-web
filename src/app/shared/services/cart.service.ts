@@ -75,7 +75,7 @@ export class CartService {
         return { items };
     }
 
-    private getCartFromDb(): Observable<Cart> {
+    getCartFromDb(): Observable<Cart> {
         console.log("RETRIEVING CART FROM DB")
 
         return this.http.get<Cart>(`${cartBaseUrl}`).pipe(
@@ -91,7 +91,7 @@ export class CartService {
     
         return this.getCartFromDb().pipe(
             map(dbCart => {
-                console.log("DB Items: " + dbCart)
+                console.log("DB Items: " + dbCart.items)
                 const mergedItems: CartItem[] = [...dbCart.items];
     
                 localCart.forEach(localItem => {

@@ -1,0 +1,50 @@
+<div class="text-2xl mb-2">Review Cart</div>
+<div class="flex flex-col lg:flex-row">
+    <!-- Cart Items -->
+    <div class="flex-grow me-5 w-full">
+
+        @if (cartItems.length !== 0) {
+            @for (item of cartItems; track item.productId) {
+                <div class="border-t border-gray-200"></div>
+                <div class="flex items-center justify-between">
+                    <div class="p-4 flex">
+                        <img [src]="item.imageUrl"
+                             alt="{{item.name}}" width="110px" class="max-w-full lg:max-w-none me-5" />
+                        <div class="w-40">
+                          <a [routerLink]="['/product', item.productId]">{{ item.name }}</a>
+                          <div class="font-bold">{{ item.price | currency: 'KES' }}</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <div class="w-32 flex justify-around items-center">
+                          <div>Quantity: </div>
+                          <div>{{ item.quantity }}</div>
+                        </div>
+                    </div>
+                </div>
+            }
+        } @else if (loading) {
+            <div class="flex w-full justify-center">
+              <span class="loading loading-spinner loading-lg"></span>
+            </div>
+        }
+
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="bg-gray-100 border-gray-400 p-5 w-full lg:w-96 h-72 mt-6 lg:mt-0 rounded-md">
+        <div class="flex justify-between font-bold">
+          <div>Total</div>
+          <div>{{ cartTotal | currency: 'KES' }}</div>
+        </div>
+        <div class="border-t border-gray-300 my-5"></div>
+        <button 
+            class="btn btn-primary w-full"
+            [disabled]="cartItems.length === 0"
+            (click)="placeOrder()"
+        >
+            Place Order
+        </button>
+    </div>
+</div>

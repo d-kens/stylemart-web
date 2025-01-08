@@ -98,7 +98,8 @@ export class CartComponent implements OnInit {
     if (this.action === 'login') {
       this.router.navigate(['auth/sign-in']);
     } else if (this.action === 'checkout') {
-      this.toastService.show("Checking out...");
+      this.cartService.mergeCarts().subscribe();
+      this.router.navigate(['/review-cart']);
     }
   }
 
