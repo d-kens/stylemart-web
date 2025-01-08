@@ -4,6 +4,7 @@ import { Cart, CartItem } from '../../shared/models/cart.model';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { OrderService } from '../../shared/services/order.service';
 
 @Component({
   selector: 'app-review-cart',
@@ -13,7 +14,9 @@ import { RouterLink } from '@angular/router';
 })
 export class ReviewCartComponent {
   cartService = inject(CartService);
+  orderService = inject(OrderService);
   toastService = inject(ToastrService);
+
 
 
   cartItems: CartItem[] = []; // Initialize with an empty array
@@ -41,6 +44,16 @@ export class ReviewCartComponent {
   }
 
   placeOrder() {
-    this.toastService.info("Placing order.....");
+    
+    this.orderService.placeOrder().subscribe({
+      next: (order) => {
+        console.log("Returned order")
+        this.toastService.success("Order placed successfully!");
+        this.cartService.clearCart(); 
+      },
+      error: (error) => {
+        this.toastService.error('Failed to place order');
+      }
+    })
   }
 }
