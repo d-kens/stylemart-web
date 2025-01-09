@@ -3,8 +3,8 @@ import { CartService } from '../../shared/services/cart.service';
 import { AuthService } from '../../auth/data-access/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { Cart, CartItem, Product } from '../../shared/models/cart.model';
 import { ToastrService } from 'ngx-toastr';
+import { CartProduct } from '../../shared/models/cart.model';
 
 @Component({
   selector: 'app-cart',
@@ -18,8 +18,8 @@ export class CartComponent implements OnInit {
   toastService = inject(ToastrService)
   router = inject(Router);
 
-  cartItems: CartItem[] = []
 
+  productsInCart: CartProduct[] = []
   labelCheckout = 'Login to checkout';
   action: 'login' | 'checkout' = 'login';
   loading = false;
@@ -29,9 +29,8 @@ export class CartComponent implements OnInit {
     this.getCart();
   }
 
-
   ngOnInit(): void {
-    this.cartService.addedToCart.subscribe((cart) => this.updateQuantity(cart));
+    this.cartService.addedToCart.subscribe((productsInCart) => this.updateQuantity(productsInCart));
 
     this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
       this.updateCheckoutLabel(isAuthenticated);
@@ -49,58 +48,63 @@ export class CartComponent implements OnInit {
   }
 
   private getCart() {
+
     this.loading = true;
-
-    const cart: Cart = this.cartService.getCart()
-
-    this.cartItems = cart.items;
-
+    this.productsInCart = this.cartService.getCart();
     this.loading = false;
+
   }
 
-  private updateQuantity(cartUpdated: Array<CartItem>) {
-    for (const cartItemToUpdate of this.cartItems) {
-      const itemToUpdate = cartUpdated.find(
-        (item) => item.productId === cartItemToUpdate.productId
-      );
-      if (itemToUpdate) {
-        cartItemToUpdate.quantity = itemToUpdate.quantity;
+  private updateQuantity(updateCartProducts: CartProduct[]) {
+    for (const product of this.productsInCart) {
+      const productToUpdate = updateCartProducts.find(
+        (updatedCartProduct) => updatedCartProduct.id === product.id
+      )
+
+      if(productToUpdate) {
+        product.quantity = productToUpdate.quantity;
       } else {
-        this.cartItems.splice(this.cartItems.indexOf(cartItemToUpdate), 1);
+        this.productsInCart.splice(this.productsInCart.indexOf(product), 1)
       }
     }
+  } 
+  
+
+
+  addQuantityToCart(product: CartProduct) {
+    this.cartService.updateCart(product, 'add');
   }
 
-  addQuantityToCart(cartItem: CartItem) {
-    this.cartService.updateCart(cartItem,'add');
+  removeQuantityToCart(product: CartProduct) {
+    this.cartService.updateCart(product, 'remove');
   }
 
-  removeQuantityToCart(cartItem: CartItem) {
-    this.cartService.updateCart(cartItem, 'remove');
-  }
-
-  removeItem(itemId: string) {
-    const itemToRemoveIndex = this.cartItems.findIndex(
-      (item) => item.productId === itemId
+  removeItem(productId: string) {
+    const productToRemoveIndex = this.productsInCart.findIndex(
+      (product) => product.id === productId
     );
 
-    if (itemToRemoveIndex) {
-      this.cartItems.splice(itemToRemoveIndex, 1);
+    if (productToRemoveIndex) {
+      this.productsInCart.splice(productToRemoveIndex, 1);
     }
-    this.cartService.removeFromCart(itemId);
+
+    this.cartService.removeFromCart(productId);
   }
 
+
+
+
   computeTotal() {
-    return this.cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    return this.productsInCart.reduce((acc, product) => acc + product.price * product.quantity, 0);
   }
 
   checkout() {
     if (this.action === 'login') {
       this.router.navigate(['auth/sign-in']);
     } else if (this.action === 'checkout') {
-      this.cartService.mergeCarts().subscribe();
-      this.router.navigate(['/review-cart']);
+     console.log("Checking out")
     }
   }
 
 }
+

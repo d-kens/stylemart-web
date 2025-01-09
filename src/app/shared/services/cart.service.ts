@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject, catchError, map, Observable, tap, throwError } from "rxjs";
-import { Cart, CartItem } from "../models/cart.model";
+import { BehaviorSubject, catchError, Observable, throwError } from "rxjs";
+import { Product, CartProduct } from "../models/cart.model";
 import { environment } from "../../../environments/environment";
 
 const cartBaseUrl = environment.cart.baseUrl
@@ -14,126 +14,63 @@ export class CartService {
     private readonly http = inject(HttpClient);
     private readonly keyStorage = 'cart';
 
-    private readonly addedToCart$ = new BehaviorSubject<CartItem[]>([]);
+    private readonly addedToCart$ = new BehaviorSubject<CartProduct[]>([]);
     addedToCart = this.addedToCart$.asObservable();
 
     constructor() {
-        const cartFromLocalStorage = this.getCartFromLocalStorage();
-        this.addedToCart$.next(cartFromLocalStorage);
+        const productsInCart = this.getCart();
+        this.addedToCart$.next(productsInCart);
     }
 
-    private getCartFromLocalStorage(): CartItem[] {
-        const cartItems = localStorage.getItem(this.keyStorage);
-        return cartItems ? JSON.parse(cartItems) as CartItem[] : [];
+    getCart(): CartProduct[] {
+        const products = localStorage.getItem(this.keyStorage);
+        return products ? JSON.parse(products) as CartProduct[] : []
     }
 
-    private saveCartToLocalStorage(cartItems: CartItem[]): void {
-        localStorage.setItem(this.keyStorage, JSON.stringify(cartItems));
-        this.addedToCart$.next(cartItems);
+
+    saveCart(products: CartProduct[]): void {
+        localStorage.setItem(this.keyStorage, JSON.stringify(products));
+        this.addedToCart$.next(products);
     }
 
-    updateCart(cartItem: CartItem, command: 'add' | 'remove'): void {
-        const cartFromLocalStorage = this.getCartFromLocalStorage();
-        const existingItem = cartFromLocalStorage.find(item => item.productId === cartItem.productId);
+    updateCart(product: Product, command: 'add' | 'remove'): void {
+        const productsInCart = this.getCart();
+        const existingProductInCart = productsInCart.find(productInCart => productInCart.id === product.id);
 
-        switch (command) {
-        case 'add':
-            if (existingItem) {
-            existingItem.quantity++;
-            } else {
-            cartFromLocalStorage.push({ ...cartItem, quantity: 1 });
-            }
-            break;
-        case 'remove':
-            if (existingItem) {
-            if (existingItem.quantity > 1) {
-                existingItem.quantity--;
-            } else {
-                this.removeFromCart(existingItem.productId);
-                return;
-            }
-            }
-            break;
+        switch(command) {
+            case 'add':
+                if (existingProductInCart) {
+                    existingProductInCart.quantity++;
+                } else {
+                    productsInCart.push({...product, quantity: 1 });
+                }
+                break;
+
+            case 'remove':
+                if(existingProductInCart) {
+                    if(existingProductInCart.quantity > 1) {
+                        existingProductInCart.quantity--;
+                    } else {
+                        this.removeFromCart(existingProductInCart.id!);
+                        return;
+                    }
+                }
+                break;
         }
 
-        this.saveCartToLocalStorage(cartFromLocalStorage);
+
+        this.saveCart(productsInCart)
     }
 
     removeFromCart(productId: string): void {
-        const cartFromLocalStorage = this.getCartFromLocalStorage();
-        const updatedCart = cartFromLocalStorage.filter(item => item.productId !== productId);
-        this.saveCartToLocalStorage(updatedCart);
+        const productsInCart = this.getCart();
+        const updatedCart = productsInCart.filter(productInCart => productInCart.id!== productId);
+        this.saveCart(updatedCart);
     }
 
-    clearCart(): void {
+    clearCart() {
         localStorage.removeItem(this.keyStorage);
         this.addedToCart$.next([]);
     }
-
-    getCart(): Cart {
-        const items = this.getCartFromLocalStorage();
-        return { items };
-    }
-
-    getCartFromDb(): Observable<Cart> {
-        console.log("RETRIEVING CART FROM DB")
-
-        return this.http.get<Cart>(`${cartBaseUrl}`).pipe(
-          catchError(err => {
-            console.error('Error fetching cart from DB:', err);
-            return throwError(() => new Error('Failed to fetch cart from DB.'));
-          })
-        );
-    }
-
-    mergeCarts(): Observable<Cart> {
-        const localCart = this.getCartFromLocalStorage();
-    
-        return this.getCartFromDb().pipe(
-            map(dbCart => {
-                console.log("DB Items: " + dbCart.items)
-                const mergedItems: CartItem[] = [...dbCart.items];
-    
-                localCart.forEach(localItem => {
-                    const dbItem = mergedItems.find(item => item.productId === localItem.productId);
-                    if (dbItem) {
-                        dbItem.quantity += localItem.quantity;
-                    } else {
-                        mergedItems.push(localItem);
-                    }
-                });
-    
-                return { items: mergedItems };
-            }),
-            tap(mergedCart => {
-                this.saveCartToLocalStorage(mergedCart.items);
-    
-    
-                this.syncCartToDb(mergedCart.items).subscribe({
-                    error: err => console.error('Failed to sync merged cart to DB:', err)
-                });
-            }),
-            catchError(err => {
-                console.error('Error merging carts:', err);
-                return throwError(() => new Error('Failed to merge carts.'));
-            })
-        );
-    }
-
-  
-    private syncCartToDb(cart: CartItem[]): Observable<void> {
-        const updateCartDto = { items: cart.map(({ productId, quantity }) => ({ productId, quantity })) };
-
-        console.log("UPDATE CART OBJECT" + updateCartDto.items)
-    
-        return this.http.patch<void>(`${cartBaseUrl}`, updateCartDto).pipe(
-            catchError(err => {
-                console.error('Error syncing cart to DB:', err);
-                return throwError(() => new Error('Failed to sync cart to DB.'));
-            })
-        );
-    }
-
-
     
 }

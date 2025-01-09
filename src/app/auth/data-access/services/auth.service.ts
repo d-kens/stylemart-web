@@ -39,12 +39,6 @@ export class AuthService {
 
         // Update authentication status
         this.updateAuthenticationStatus(true);
-
-        // Merge carts
-        this.cartService.mergeCarts().subscribe({
-          next: () => console.log('Cart merged successfully'),
-          error: err => console.error('Error merging cart:', err),
-        });
       })
     );
   }
