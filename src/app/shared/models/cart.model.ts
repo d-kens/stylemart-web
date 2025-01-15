@@ -20,6 +20,12 @@ export interface Product extends BaseProduct {
     imageUrl: string;
 }
 
-export interface CartProduct extends Product {
+
+export interface CartProduct {
+    id: string;
+    name: string;
+    imageUrl: string;
+    price: number;
     quantity: number;
 }
+

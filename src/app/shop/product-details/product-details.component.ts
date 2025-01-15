@@ -74,7 +74,13 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToCart(product: Product) {
-    this.cartService.updateCart(product, 'add');
+    this.cartService.updateCart({
+      id: product.id!,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      imageUrl: product.imageUrl,
+    }, 'add');
     this.labelAddToCart = 'Added to cart';
     this.iconAddToCart = 'check';
 

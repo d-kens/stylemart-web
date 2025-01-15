@@ -10,7 +10,6 @@
                  alt="{{product.name}}" width="110px" class="max-w-full lg:max-w-none me-5" />
             <div class="w-40">
               <a [routerLink]="['/product', product.id!]">{{ product.name }}</a>
-              <div class="text-sm">{{ product.brand }}</div>
               <div class="font-bold">{{ product.price | currency: 'KES' }}</div>
             </div>
           </div>
