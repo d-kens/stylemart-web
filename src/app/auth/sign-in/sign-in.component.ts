@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthReqObject } from '../data-access/models/auth.model';
 import { AuthService } from '../data-access/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { CartService } from '../../shared/services/cart.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -17,6 +18,7 @@ export class SignInComponent {
   loading = false;
 
   private authService = inject(AuthService);
+  private cartService = inject(CartService);
   private toastr = inject(ToastrService);
   private router = inject(Router)
 
@@ -53,6 +55,7 @@ export class SignInComponent {
       next: () => {
         this.loading = false;
         this.loginForm.reset();
+        this.cartService.syncCarts();  // Synchronize local and backend carts on login
         this.toastr.success('Login successful');
         this.router.navigate(['/']);
       },

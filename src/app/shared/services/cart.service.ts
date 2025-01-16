@@ -64,6 +64,8 @@ export class CartService {
                 }
                 break;
         }
+
+        this.saveCart(productsInCart)
     }
 
     removeFromCart(productId: string): void {
@@ -78,39 +80,45 @@ export class CartService {
     }
 
     syncCarts() {
-        this.getCartItemsFromDb().subscribe((dbProducts) => {
-            const localProducts = this.getCart();
+
+        this.getCartItemsFromDb().subscribe({
+            next: (dbProducts) => {
+                dbProducts.forEach(dbProduct => {
+                    console.log(JSON.stringify(dbProduct));
+                });
     
-            // Create a map for a quick lookup of local products
-            const localProductMap = new Map<string, CartProduct>();
-            localProducts.forEach(product => {
-                localProductMap.set(product.id, product);
-            });
-    
-            const updatedCart: CartProduct[] = [];
-    
-            // Handle products in the database
-            dbProducts.forEach(dbProduct => {
-                if (localProductMap.has(dbProduct.id)) {
-                    // If product exists in both, resolve quantity
-                    const localProduct = localProductMap.get(dbProduct.id)!;
-                    localProduct.quantity = dbProduct.quantity; // TODO: What is the best way to resolve quantity
-                    updatedCart.push(localProduct);
-                } else {
-                    // If product is in the database but not in the local cart, add it to the local cart
-                    updatedCart.push({ ...dbProduct });
-                }
-            });
-    
-            // Retain products that are in the local cart but not in the database
-            localProducts.forEach(localProduct => {
-                if (!dbProducts.some(dbProduct => dbProduct.id === localProduct.id)) {
-                    updatedCart.push(localProduct);
-                }
-            });
-    
-            this.saveCart(updatedCart);
-            this.updateCartOnBackend(updatedCart);
+                const localProducts = this.getCart();
+        
+                const localProductMap = new Map<string, CartProduct>();
+                localProducts.forEach(product => {
+                    localProductMap.set(product.id, product);
+                });
+        
+                const updatedCart: CartProduct[] = [];
+        
+                dbProducts.forEach(dbProduct => {
+                    if (localProductMap.has(dbProduct.id)) {
+                        const localProduct = localProductMap.get(dbProduct.id)!;
+                        localProduct.quantity = localProduct.quantity; 
+                        updatedCart.push(localProduct);
+                    } else {
+                        updatedCart.push({ ...dbProduct });
+                    }
+                });
+        
+                localProducts.forEach(localProduct => {
+                    if (!dbProducts.some(dbProduct => dbProduct.id === localProduct.id)) {
+                        updatedCart.push(localProduct);
+                    }
+                });
+        
+                this.saveCart(updatedCart);
+                this.updateCartOnBackend(updatedCart);
+            },
+            error: (error) => {
+                console.log("An error occurred while fetching");
+                console.log(error)
+            }
         });
     }
     

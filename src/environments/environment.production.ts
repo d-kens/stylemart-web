@@ -12,6 +12,6 @@ export const environment = {
         baseUrl: 'http://localhost:3000/orders'
     },
     cart: {
-        baseUrl: 'http://localhost:3000/cart'
+        baseUrl: 'http://localhost:3000/cart/items'
     }
 }

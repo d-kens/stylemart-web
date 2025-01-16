@@ -74,6 +74,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToCart(product: Product) {
+    console.log("Add to cart button clicked")
     this.cartService.updateCart({
       id: product.id!,
       name: product.name,
