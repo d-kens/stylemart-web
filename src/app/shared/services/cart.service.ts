@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { BehaviorSubject, catchError, Observable, throwError } from "rxjs";
-import { Product, CartProduct } from "../models/cart.model";
+import { CartProduct } from "../models/cart.model";
 
 import { environment } from "../../../environments/environment";
 
@@ -78,6 +78,13 @@ export class CartService {
         localStorage.removeItem(this.keyStorage);
         this.addedToCart$.next([]);
     }
+
+
+    computeTotal() {
+        const productsInCart = this.getCart();
+        return productsInCart.reduce((acc, product) => acc + product.price * product.quantity, 0);
+    }
+    
 
     syncCarts() {
 
