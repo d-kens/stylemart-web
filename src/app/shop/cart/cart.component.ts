@@ -98,15 +98,6 @@ export class CartComponent implements OnInit {
     return this.productsInCart.reduce((acc, product) => acc + product.price * product.quantity, 0);
   }
 
-
-
-  /**
-   * TODO:
-   * - Review relationships between entities 
-   * - The Carts are being synced at checkout
-   * - The Carts should be synced at place order
-   */
-
   checkout() {
     if (this.action === 'login') {
       this.router.navigate(['auth/sign-in']);

@@ -13,6 +13,10 @@ export class OrderService {
     private readonly http = inject(HttpClient);
 
 
+    findAll(): Observable<any> {
+        return this.http.get<any[]>(`${ordersBaseUrl}`);
+    }
+
     placeOrder(): Observable<any> {
         return this.http.post<any>(`${ordersBaseUrl}`, '');
     }

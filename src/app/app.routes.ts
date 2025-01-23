@@ -14,7 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { ProductDetailsComponent } from './shop/product-details/product-details.component';
 import { ProductsComponent } from './shop/products/products.component';
 import { CartComponent } from './shop/cart/cart.component';
-import { OrderSummary } from './shop/order-summary/order-summary..component';
+import { OrderSummary } from './shop/order-summary/order-summary.component';
 import { OrdersComponent } from './shop/orders/orders.component';
 
 export const routes: Routes = [
