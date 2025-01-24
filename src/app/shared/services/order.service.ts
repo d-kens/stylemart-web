@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs";
+import { Order } from "../models/order.model";
 
 const ordersBaseUrl = environment.orders.baseUrl
 
@@ -13,12 +14,16 @@ export class OrderService {
     private readonly http = inject(HttpClient);
 
 
-    findAll(): Observable<any> {
-        return this.http.get<any[]>(`${ordersBaseUrl}`);
+    findAll(): Observable<Order[]> {
+        return this.http.get<Order[]>(`${ordersBaseUrl}`);
     }
 
-    placeOrder(): Observable<any> {
-        return this.http.post<any>(`${ordersBaseUrl}`, '');
+    findOne(orderId: string): Observable<Order> {
+        return this.http.get<Order>(`${ordersBaseUrl}/${orderId}`);
+    }
+
+    placeOrder(): Observable<Order> {
+        return this.http.post<Order>(`${ordersBaseUrl}`, '');
     }
 
 }

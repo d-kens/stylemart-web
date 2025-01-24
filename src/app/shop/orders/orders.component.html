@@ -1,4 +1,54 @@
-<div class="text-2xl mb-2">Order Summary</div>
-<div class="flex flex-col lg:flex-row">
-    
+<div class="text-2xl mb-4">Order Summary</div>
+
+<div class="overflow-x-auto">
+  <table class="table-auto w-full border-collapse border border-gray-300">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="border border-gray-300 px-4 py-2">Order ID</th>
+        <th class="border border-gray-300 px-4 py-2">Status</th>
+        <th class="border border-gray-300 px-4 py-2">Total</th>
+        <th class="border border-gray-300 px-4 py-2">Created At</th>
+        <th class="border border-gray-300 px-4 py-2">Updated At</th>
+        <th class="border border-gray-300 px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let order of orders"
+        class="hover:bg-gray-100 cursor-pointer"
+        (click)="onView(order.id)"
+      >
+        <td class="border border-gray-300 px-4 py-2">{{ order.id }}</td>
+        <td class="border border-gray-300 px-4 py-2">
+          <span
+            [ngClass]="{
+              'text-red-500': order.orderStatus === 'Pending',
+              'text-green-500': order.orderStatus === 'Paid'
+            }"
+          >
+            {{ order.orderStatus | titlecase }}
+          </span>
+        </td>
+        <td class="border border-gray-300 px-4 py-2">${{ order.total }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ order.createdAt | date: 'short' }}</td>
+        <td class="border border-gray-300 px-4 py-2">{{ order.updatedAt | date: 'short' }}</td>
+        <td class="border border-gray-300 px-4 py-2 text-center">
+          <button
+            class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+            (click)="onView(order.id); $event.stopPropagation()"
+          >
+            View
+          </button>
+
+          <button
+            *ngIf="order.orderStatus === 'Pending'"
+            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 ml-2"
+            (click)="onPay(order.id); $event.stopPropagation()"
+          >
+            Pay
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

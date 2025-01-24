@@ -14,8 +14,9 @@ import { HomeComponent } from './home/home.component';
 import { ProductDetailsComponent } from './shop/product-details/product-details.component';
 import { ProductsComponent } from './shop/products/products.component';
 import { CartComponent } from './shop/cart/cart.component';
-import { OrderSummary } from './shop/order-summary/order-summary.component';
+import { CartSummary } from './shop/cart-summary/cart-summary.component';
 import { OrdersComponent } from './shop/orders/orders.component';
+import { OrderDetailsComponent } from './shop/order-details/order-details.component';
 
 export const routes: Routes = [
     {
@@ -88,10 +89,17 @@ export const routes: Routes = [
     },
     {
         path: 'order-summary',
-        component: OrderSummary
+        component: CartSummary,
+        canActivate: [AuthGuard],
     },
     {
         path: "orders",
-        component: OrdersComponent
+        component: OrdersComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: "orders/:orderId",
+        component: OrderDetailsComponent,
+        canActivate: [AuthGuard],
     }
 ];

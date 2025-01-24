@@ -1,0 +1,63 @@
+<div class="container mx-auto p-6">
+  <!-- Order Summary -->
+  <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+    <h1 class="text-2xl font-bold mb-4">Order Details</h1>
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center">
+      <div class="space-y-2">
+        <p><strong>Order ID:</strong> {{ order.id }}</p>
+        <p>
+          <strong>Status:</strong>
+          <span
+            class="px-2 py-1 text-sm font-medium rounded-md"
+            [ngClass]="{
+              'bg-red-100 text-red-600': order.orderStatus === 'Pending',
+              'bg-green-100 text-green-600': order.orderStatus === 'Paid'
+            }"
+          >
+            {{ order.orderStatus | titlecase }}
+          </span>
+        </p>
+        <p><strong>Total:</strong> Ksh: {{ order.total }}</p>
+      </div>
+      <div class="mt-4 lg:mt-0">
+        <!-- Pay Button (Only for Pending Orders) -->
+        <button
+          *ngIf="order?.orderStatus === 'Pending'"
+          class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition"
+          (click)="onPay(order.id)"
+        >
+          Pay Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Items Table -->
+  <div class="bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-xl font-bold mb-4">Order Items</h2>
+    <div class="overflow-x-auto">
+      <table class="table-auto w-full border border-gray-300">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="px-4 py-2 text-center border border-gray-300">No.</th>
+            <th class="px-4 py-2 text-center border border-gray-300">Name</th>
+            <th class="px-4 py-2 text-center border border-gray-300">Quantity</th>
+            <th class="px-4 py-2 text-right border border-gray-300">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of order.orderItems; let i = index"
+            class="hover:bg-gray-100 transition"
+          >
+            <!-- Row Number -->
+            <td class="px-4 py-2 text-center border border-gray-300">{{ i + 1 }}</td>
+            <td class="px-4 py-2 text-center border border-gray-300">{{ item.name }}</td>
+            <td class="px-4 py-2 text-center border border-gray-300">{{ item.quantity }}</td>
+            <td class="px-4 py-2 text-right border border-gray-300">Ksh: {{ item.price }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

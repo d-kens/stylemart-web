@@ -7,12 +7,12 @@ import { OrderService } from '../../shared/services/order.service';
 import { CartProduct } from '../../shared/models/cart.model';
 
 @Component({
-  selector: 'app-order-summary',
+  selector: 'app-cart-summary',
   imports: [CommonModule, RouterLink],
-  templateUrl: './order-summary.component.html',
-  styleUrl: './order-summary.component.scss'
+  templateUrl: './cart-summary.component.html',
+  styleUrl: './cart-summary.component.scss'
 })
-export class OrderSummary implements OnInit {
+export class CartSummary implements OnInit {
 
   productsInCart: CartProduct[] = [];
   loading = false;
