@@ -29,7 +29,7 @@
             {{ order.orderStatus | titlecase }}
           </span>
         </td>
-        <td class="border border-gray-300 px-4 py-2">${{ order.total }}</td>
+        <td class="border border-gray-300 px-4 py-2">Ksh: {{ order.total }}</td>
         <td class="border border-gray-300 px-4 py-2">{{ order.createdAt | date: 'short' }}</td>
         <td class="border border-gray-300 px-4 py-2">{{ order.updatedAt | date: 'short' }}</td>
         <td class="border border-gray-300 px-4 py-2 text-center">

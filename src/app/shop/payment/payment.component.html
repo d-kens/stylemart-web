@@ -1,0 +1,44 @@
+<div class="container mx-auto max-w-2xl">
+    <h1 class="text-2xl font-bold mb-4">Make Payment</h1>
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <label for="phone" class="block mb-2 text-sm font-medium">Phone Number</label>
+      <input
+        type="text"
+        id="phone"
+        [(ngModel)]="phoneNumber"
+        class="mt-1 input input-bordered w-full rounded-md border-gray-300 focus:outline-none"
+        placeholder="Enter your phone number"
+      />
+      <button
+        class="btn btn-primary w-full"
+        (click)="initiatePayment()"
+        [disabled]="!phoneNumber"
+      >
+        Make Payment
+      </button>
+  
+      <div *ngIf="paymentResponse" class="mt-4">
+        <p>{{ paymentResponse.message }}</p>
+        <button
+          *ngIf="!isPolling"
+          class="btn btn-secondary w-full"
+          (click)="processPayment()"
+        >
+          Process Payment
+        </button>
+      </div>
+  
+      <div *ngIf="isPolling" class="mt-4">
+        <p>Polling for payment status...</p>
+        <p *ngIf="pollingStatus">Status: {{ pollingStatus }}</p>
+        <button
+          *ngIf="pollingComplete"
+          class="btn btn-warning w-full"
+          (click)="confirmPayment()"
+        >
+          Confirm Payment
+        </button>
+      </div>
+    </div>
+</div>
+  

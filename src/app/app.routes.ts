@@ -17,6 +17,7 @@ import { CartComponent } from './shop/cart/cart.component';
 import { CartSummary } from './shop/cart-summary/cart-summary.component';
 import { OrdersComponent } from './shop/orders/orders.component';
 import { OrderDetailsComponent } from './shop/order-details/order-details.component';
+import { PaymentComponent } from './shop/payment/payment.component';
 
 export const routes: Routes = [
     {
@@ -100,6 +101,11 @@ export const routes: Routes = [
     {
         path: "orders/:orderId",
         component: OrderDetailsComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'orders/:orderId/make-payment',
+        component: PaymentComponent,
         canActivate: [AuthGuard],
     }
 ];

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Order } from '../../shared/models/order.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../shared/services/order.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './order-details.component.scss'
 })
 export class OrderDetailsComponent {
-  order!: Order;
+  order: Order = {} as Order;
   orderItems: any[] = [];
   loading: boolean = false;
 
@@ -20,7 +20,8 @@ export class OrderDetailsComponent {
   constructor(
     private route: ActivatedRoute,
     private orderService: OrderService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -48,8 +49,9 @@ export class OrderDetailsComponent {
     });
   }
 
-  onPay(orderId: string): void {
-    this.toastr.success(`Payment initiated for Order #${orderId}`);
+  initiatePayment(): void {
+    console.log('Initiating payment for order:', this.order.id);
+    this.router.navigate([`orders/${this.order.id}/make-payment`])
   }
 
 }

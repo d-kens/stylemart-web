@@ -20,11 +20,10 @@
         <p><strong>Total:</strong> Ksh: {{ order.total }}</p>
       </div>
       <div class="mt-4 lg:mt-0">
-        <!-- Pay Button (Only for Pending Orders) -->
         <button
           *ngIf="order?.orderStatus === 'Pending'"
           class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition"
-          (click)="onPay(order.id)"
+          (click)="initiatePayment()"
         >
           Pay Now
         </button>
