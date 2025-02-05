@@ -10,35 +10,12 @@
         placeholder="Enter your phone number"
       />
       <button
-        class="btn btn-primary w-full"
+        class="btn btn-primary w-full mt-3"
         (click)="initiatePayment()"
         [disabled]="!phoneNumber"
       >
         Make Payment
       </button>
-  
-      <div *ngIf="paymentResponse" class="mt-4">
-        <p>{{ paymentResponse.message }}</p>
-        <button
-          *ngIf="!isPolling"
-          class="btn btn-secondary w-full"
-          (click)="processPayment()"
-        >
-          Process Payment
-        </button>
-      </div>
-  
-      <div *ngIf="isPolling" class="mt-4">
-        <p>Polling for payment status...</p>
-        <p *ngIf="pollingStatus">Status: {{ pollingStatus }}</p>
-        <button
-          *ngIf="pollingComplete"
-          class="btn btn-warning w-full"
-          (click)="confirmPayment()"
-        >
-          Confirm Payment
-        </button>
-      </div>
     </div>
 </div>
   

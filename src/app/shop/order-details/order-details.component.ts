@@ -49,8 +49,7 @@ export class OrderDetailsComponent {
     });
   }
 
-  initiatePayment(): void {
-    console.log('Initiating payment for order:', this.order.id);
+  makePayment(): void {
     this.router.navigate([`orders/${this.order.id}/make-payment`])
   }
 

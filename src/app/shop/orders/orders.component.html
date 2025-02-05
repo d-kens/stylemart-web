@@ -16,7 +16,7 @@
       <tr
         *ngFor="let order of orders"
         class="hover:bg-gray-100 cursor-pointer"
-        (click)="onView(order.id)"
+        (click)="viewOrder(order.id)"
       >
         <td class="border border-gray-300 px-4 py-2">{{ order.id }}</td>
         <td class="border border-gray-300 px-4 py-2">
@@ -35,7 +35,7 @@
         <td class="border border-gray-300 px-4 py-2 text-center">
           <button
             class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
-            (click)="onView(order.id); $event.stopPropagation()"
+            (click)="viewOrder(order.id); $event.stopPropagation()"
           >
             View
           </button>
@@ -43,7 +43,7 @@
           <button
             *ngIf="order.orderStatus === 'Pending'"
             class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 ml-2"
-            (click)="onPay(order.id); $event.stopPropagation()"
+            (click)="makePayment(order.id); $event.stopPropagation()"
           >
             Pay
           </button>

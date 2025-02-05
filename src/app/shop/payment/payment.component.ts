@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PaymentService } from '../../shared/services/payment.servce';
+import { PaymentRequest } from '../../shared/models/payment';
+import { Order } from '../../shared/models/order.model';
 
 @Component({
   selector: 'app-payment',
@@ -12,32 +15,74 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './payment.component.scss'
 })
 export class PaymentComponent {
-
   phoneNumber: string = '';
-  orderId: string;
-  paymentResponse: any;
-  isPolling: boolean = false;
-  pollingStatus: string = '';
-  pollingComplete: boolean = false;
+  order!: Order;
+  loading = false;
+  
 
 
   constructor(
     private orderService: OrderService,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private paymentService: PaymentService
   ) {
-    this.orderId = this.route.snapshot.paramMap.get('orderId')!;
-
-    console.log(this.orderId)
+    const orderid = this.route.snapshot.paramMap.get('orderId')!;
+    this.fetchOrderDetails(orderid)
   }
 
-  initiatePayment() {}
 
-  processPayment() {}
+  fetchOrderDetails(orderId: string): void {
+    this.loading = true;
 
-  startPolling() {}
+    this.orderService.findOne(orderId).subscribe({
+      next: (order) => {
+        this.order = order;
+        this.loading = false;
+      },
+      error: (error) => {
+        this.loading = false;
+        this.toastr.error('Could not fetch order details: ' + error);
+      },
+    });
+  }
 
-  checkOrderStatus() {}
+  initiatePayment() {
 
-  confirmPayment() {}
+    const paymentReq: PaymentRequest = {
+      orderId: this.order.id,
+      amount: this.order.total,
+      provider: "MPESA",
+      mobile: {
+        transactionType: "STK",
+        phoneNumber: "254707127309"
+      }
+    }
+
+    console.log("Payment Request");
+    console.log(paymentReq);
+
+     // TODO: Handle hadnle paymen here from this point
+
+
+    return;
+
+    this.loading = true;
+
+
+    this.paymentService.initiatePayment(paymentReq).subscribe({
+      next: (paymentResp) => {
+        this.loading = false;
+        console.log("Initiate Payment response");
+        console.log(paymentResp);
+
+      },
+      error: (error) => {
+        this.loading = false;
+        this.toastr.error("Payment initiation Failed", error.message)
+      }
+    })
+
+  }
+
 }

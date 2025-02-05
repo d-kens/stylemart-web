@@ -38,11 +38,12 @@ export class OrdersComponent {
     })
   }
 
-  onPay(orderId: string): void {
-    this.toastr.success(`Payment initiated for Order #${orderId}!`);
+
+  makePayment(orderId: string): void {
+    this.router.navigate([`orders/${orderId}/make-payment`])
   }
 
-  onView(orderId: string): void {
+  viewOrder(orderId: string): void {
     this.router.navigate([`/orders/${orderId}`]);
   }
 
