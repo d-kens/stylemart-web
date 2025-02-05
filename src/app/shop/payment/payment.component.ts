@@ -51,7 +51,7 @@ export class PaymentComponent {
 
     const paymentReq: PaymentRequest = {
       orderId: this.order.id,
-      amount: this.order.total,
+      amount: Number(this.order.total),
       provider: "MPESA",
       mobile: {
         transactionType: "STK",
@@ -59,13 +59,9 @@ export class PaymentComponent {
       }
     }
 
+
     console.log("Payment Request");
     console.log(paymentReq);
-
-     // TODO: Handle hadnle paymen here from this point
-
-
-    return;
 
     this.loading = true;
 
@@ -79,6 +75,8 @@ export class PaymentComponent {
       },
       error: (error) => {
         this.loading = false;
+        console.log("Pay,mnet Initiation Error: ");
+        console.log(error);
         this.toastr.error("Payment initiation Failed", error.message)
       }
     })

@@ -15,7 +15,7 @@ export class PaymentService {
 
 
     initiatePayment(paymentRqst: PaymentRequest): Observable<any> {
-        return this.http.post<any>(`${paymentBaseUrl}/initiate-payment`, '');
+        return this.http.post<any>(`${paymentBaseUrl}/initiate-payment`, paymentRqst);
     }
 
 }

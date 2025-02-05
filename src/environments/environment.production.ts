@@ -15,6 +15,6 @@ export const environment = {
         baseUrl: 'http://localhost:3000/cart/items'
     },
     payment: {
-        baseurl: 'http://localhost:3000//payment-gateway'
+        baseurl: 'http://localhost:3000/payment-gateway'
     }
 }
