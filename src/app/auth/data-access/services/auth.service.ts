@@ -34,10 +34,8 @@ export class AuthService {
   login(userData: AuthReqObject): Observable<{ accessToken: string }> {
     return this.http.post<{ accessToken: string }>(`${baseUrl}/login`, userData).pipe(
       tap(response => {
-        // Store access token
         this.storeAccessToken(response.accessToken);
 
-        // Update authentication status
         this.updateAuthenticationStatus(true);
       })
     );
